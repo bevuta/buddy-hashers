@@ -2,6 +2,10 @@
  {buddy/buddy-core {:mvn/version "1.10.413"}
   clojurewerkz/scrypt {:mvn/version "1.2.0"}}
  :paths ["src/clj" "resources" "target/classes"]
+ :deps/prep-lib
+ {:ensure "target/classes"
+  :alias :build
+  :fn compile}
  :aliases
  {:dev
   {:extra-deps
