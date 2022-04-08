@@ -198,23 +198,6 @@
 ;; Key Verification
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod check-password :bcrypt+sha512
-  [params attempt]
-  (let [pwdbytes (:password params)]
-    (if (= (count pwdbytes) 24)
-      (let [params' (assoc params :password attempt)
-            candidate (derive-password params')]
-        (bytes/equals? (:password params)
-                       (:password candidate)))
-
-      ;; Backward compatibility for password checking
-      ;; for old algorithm
-      (let [candidate (-> (bytes/concat attempt (:salt params))
-                          (hash/sha512))]
-        (buddy.impl.bcrypt.BCrypt/checkpw
-         (codecs/bytes->hex candidate)
-         (codecs/bytes->str (:password params)))))))
-
 (defmethod check-password :scrypt
   [pwdparams attempt]
   (let [salt (:salt pwdparams)
